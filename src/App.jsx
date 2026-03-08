@@ -8,18 +8,20 @@ function App() {
   const inputRef = useRef(null);
 
   useEffect(() => {
-    const savedNotes = JSON.parse(localStorage.getItem("notes"));
-    if (savedNotes) {
-      setNotes(savedNotes);
-    }
+    const savedNotes = JSON.parse(localStorage.getItem("notes")) || [];
+    setNotes(savedNotes);
   }, []);
 
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes));
   }, [notes]);
 
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
   const addNote = () => {
-    if (noteInput === "") return;
+    if (!noteInput.trim()) return;
     setNotes([...notes, noteInput]);
     setNoteInput("");
   };
@@ -41,7 +43,6 @@ function App() {
         />
 
         <button onClick={addNote}>Add Note</button>
-
         <h3>Total Notes: {totalNotes}</h3>
 
         <ul>
