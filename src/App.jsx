@@ -1,35 +1,65 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect, useRef, useMemo } from "react";
+import { NotesContext } from "./NotesContext";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [notes, setNotes] = useState([]);
+  const [noteInput, setNoteInput] = useState("");
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    const savedNotes = JSON.parse(localStorage.getItem("notes"));
+    if (savedNotes) {
+      setNotes(savedNotes);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
+
+  const addNote = () => {
+    if (noteInput === "") return;
+    setNotes([...notes, noteInput]);
+    setNoteInput("");
+  };
+
+  const totalNotes = useMemo(() => {
+    return notes.length;
+  }, [notes]);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <NotesContext.Provider value={{ notes }}>
+      <div id="main">
+        <h2>Notes Dashboard</h2>
+
+        <input
+          ref={inputRef}
+          value={noteInput}
+          onChange={(e) => setNoteInput(e.target.value)}
+          placeholder="Enter note"
+        />
+
+        <button onClick={addNote}>Add Note</button>
+
+        <h3>Total Notes: {totalNotes}</h3>
+
+        <ul>
+          {notes.map((note, index) => (
+            <li
+              key={index}
+              onClick={() => setSelectedIndex(index)}
+              style={{
+                backgroundColor: selectedIndex === index ? "yellow" : "white",
+              }}
+            >
+              {note}
+            </li>
+          ))}
+        </ul>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </NotesContext.Provider>
+  );
 }
 
-export default App
+export default App;
