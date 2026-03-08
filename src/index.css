@@ -1,38 +1,31 @@
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-}
-
-#main {
+#main{
   width: 400px;
   margin: 50px auto;
   padding: 20px;
-  background: white;
   border: 1px solid #ccc;
 }
 
-h2 {
+h2{
   text-align: center;
 }
 
-input {
+input{
   width: 70%;
   padding: 8px;
   margin-right: 5px;
 }
 
-button {
+button{
   padding: 8px 12px;
-  cursor: pointer;
 }
 
-ul {
+ul{
   list-style: none;
   padding: 0;
   margin-top: 20px;
 }
 
-li {
+li{
   padding: 10px;
   border: 1px solid #ddd;
   margin-bottom: 5px;
